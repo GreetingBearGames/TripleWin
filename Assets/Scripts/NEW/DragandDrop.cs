@@ -10,16 +10,20 @@ public class DragandDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     [SerializeField] Canvas canvas;
     private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
+    public Vector2 startPos;
+    private GameObject boyutlandirilmisTabla;
 
 
     void Start()
     {
+        boyutlandirilmisTabla = GameObject.Find("2-Tabla");
         canvasGroup = this.GetComponent<CanvasGroup>();
         rectTransform = this.GetComponent<RectTransform>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        startPos = transform.position;
     }
 
 
@@ -39,5 +43,11 @@ public class DragandDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     {
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;     //böylece tekrar tutup sürüklenebilir yaptın.
+
+        //tabla haricinde bir yere sürüklerse
+        if (!RectTransformUtility.RectangleContainsScreenPoint(boyutlandirilmisTabla.GetComponent<RectTransform>(), eventData.position))
+        {
+            transform.position = startPos;
+        }
     }
 }
