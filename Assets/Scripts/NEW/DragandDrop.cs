@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class DragandDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
 
-    [SerializeField] Canvas canvas;
     private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
     public Vector2 startPos;
@@ -35,7 +31,7 @@ public class DragandDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
-        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        rectTransform.position = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
     }
 
 
@@ -44,8 +40,9 @@ public class DragandDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;     //böylece tekrar tutup sürüklenebilir yaptın.
 
+
         //tabla haricinde bir yere sürüklerse
-        if (!RectTransformUtility.RectangleContainsScreenPoint(boyutlandirilmisTabla.GetComponent<RectTransform>(), eventData.position))
+        if (!RectTransformUtility.RectangleContainsScreenPoint(boyutlandirilmisTabla.GetComponent<RectTransform>(), rectTransform.position))
         {
             transform.position = startPos;
         }

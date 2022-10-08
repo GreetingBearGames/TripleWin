@@ -146,18 +146,16 @@ public class TablaSlotController : MonoBehaviour
 
     private void ParticleDogurucu(int slottakiItem, Vector3 slottakiObjePos, int slotaYerlesenItem)
     {
-        int particleSize = Mathf.Abs(slotaYerlesenItem) * 20;
+        int particleSize = Mathf.Abs(slotaYerlesenItem) * 30;
         if (Mathf.Sign(slottakiItem) == 1) //eğer pozitifse. Yani slottaki yok edilecek item player1'e aitse
         {
-            var particleGameObject = p1particle;
-
-            particleGameObject.transform.localScale = p1particle.transform.localScale * particleSize;
-            Instantiate(particleGameObject, slottakiObjePos, p1particle.transform.rotation);
+            var particleGameObject = Instantiate(p1particle, slottakiObjePos, p1particle.transform.rotation);
+            particleGameObject.transform.localScale *= particleSize;
         }
         else
         {
-            p2particle.transform.localScale = p2particle.transform.localScale * particleSize;
-            Instantiate(p2particle, slottakiObjePos, p2particle.transform.rotation);
+            var particleGameObject = Instantiate(p2particle, slottakiObjePos, p2particle.transform.rotation);
+            particleGameObject.transform.localScale *= particleSize;
         }
     }
 
