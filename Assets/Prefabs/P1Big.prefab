@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6278255977627403836}
   - component: {fileID: -9193108428821430878}
   - component: {fileID: 8010413576998167766}
+  - component: {fileID: 2045624780526561456}
   m_Layer: 5
   m_Name: P1Big
   m_TagString: Untagged
@@ -92,7 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b820628d4a6543d08fc5cc2c9ccf002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
+  startPos: {x: 0, y: 0}
 --- !u!225 &6278255977627403836
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -143,3 +144,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!58 &2045624780526561456
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2523729972707668010}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 50

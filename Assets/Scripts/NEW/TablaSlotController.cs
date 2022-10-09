@@ -10,6 +10,7 @@ public class TablaSlotController : MonoBehaviour
     public int[] slottakiItemArr = new int[25];
     private GameObject[] slottakiObjeArr = new GameObject[25];
     [SerializeField] GameTurnController gameTurnController;
+    [SerializeField] ScoreController scoreController;
     [SerializeField] GameObject p1particle, p2particle;
 
     void Start()
@@ -41,7 +42,6 @@ public class TablaSlotController : MonoBehaviour
         if (slottakiItemArr[hangiSlot] == 0)    //eğer ilgili tablo slotunda hiçbir item yoksa
         {
             itemObjesi.transform.position = slotObjesi.transform.position;
-
             slottakiItemArr[hangiSlot] = hangiItem;
             slottakiObjeArr[hangiSlot] = itemObjesi;
 
@@ -57,9 +57,6 @@ public class TablaSlotController : MonoBehaviour
         }
         else    //eğer ilgili tablo slotundaki item, yenisinden güçsüzse
         {
-            Debug.Log("üstüme yap");
-
-
             StartCoroutine(ItemYokediciVEturSonladrici(hangiItem, itemObjesi, hangiSlot, slotObjesi));
         }
     }
@@ -76,6 +73,7 @@ public class TablaSlotController : MonoBehaviour
         yeniKonulanObje.transform.SetParent(placedItemsObject, true);
 
         gameTurnController.TurnSwap();
+        scoreController.CheckNear(yeniKonulanObje);
     }
 
 
@@ -102,47 +100,9 @@ public class TablaSlotController : MonoBehaviour
         yeniKonulanObje.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
         gameTurnController.TurnSwap();
-
-        /*
-        switch (slottakiItem)
-        {
-            case 1:
-                if (slotaYerlesenItem == -2)
-                {
-                    ParticleDogurucu(slottakiItem, slottakiObje.transform, slotaYerlesenItem);
-                }
-                break;
-            case 2:
-
-                break;
-            case -1:
-
-                break;
-            case -2:
-
-                break;
-        }
-        */
-
-
-
-
-
-
-
-
-
-
-        //İLGİLİ SLOTTA VAR OLAN OBJE BOYUTUNA GÖRE PARTİCLE INSTAN
-
-
-
-
-
-
-
-
     }
+
+
 
     private void ParticleDogurucu(int slottakiItem, Vector3 slottakiObjePos, int slotaYerlesenItem)
     {
