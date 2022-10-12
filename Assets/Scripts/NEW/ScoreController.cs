@@ -1,37 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ScoreController : MonoBehaviour
 {
-
-    public static int[] calisbe = new int[3];
-
-    public List<GameObject> ilk9KareTemas = new List<GameObject>();
-    [SerializeField] GameObject ilkObje;
+    [SerializeField] TextMeshProUGUI p1ScoreText, p2ScoreText;
+    [SerializeField] WinController winController;
+    [SerializeField] GameObject p1Medium, p2Medium;
+    private Transform p1MediumParent, p2MediumParent;
+    private Vector3 p1MedPos, p2MedPos;
 
     void Start()
     {
-        /*
-        ilkObje.GetComponent<BoxCollider2D>().enabled = false;
-        RaycastHit2D[] hit = Physics2D.RaycastAll(ilkObje.transform.position, Vector2.right);
-        foreach (RaycastHit2D item in hit)
-        {
-            Debug.Log("sağ: " + item.collider + " / " + item.collider.gameObject.name);
-        }
+        p1Medium = GameObject.FindWithTag("P1Med");
+        p1MediumParent = p1Medium.transform.parent;
+        p1MedPos = p1Medium.transform.position;
 
-        if (hit.Length == 1)
-        {
-            RaycastHit2D hit2 = Physics2D.Raycast(ilkObje.transform.position, Vector2.left);
-            Debug.Log("sol: " + hit2.collider + " / " + hit2.collider.gameObject.name);
-        }
-        */
-
-
-        //Debug.Log(hit.collider + " / " + hit.collider.gameObject.name);
-        //RaycastHit2D hit2 = Physics2D.Raycast(hit.collider.gameObject.transform.position, Vector2.right, 10000);
-        //Debug.Log(hit2.collider + " / " + hit2.collider.gameObject.name);
-
+        p2Medium = GameObject.FindWithTag("P2Med");
+        p2MediumParent = p2Medium.transform.parent;
+        p2MedPos = p2Medium.transform.position;
     }
 
     void Update()
@@ -39,113 +27,247 @@ public class ScoreController : MonoBehaviour
 
     }
 
-    public void CheckNear(GameObject yerlestirilenItem)
+    public void CheckScore(int num)
     {
-        ilk9KareTemas.Clear();
+        xSagaDogru(num);
+        xSolaDogru(num);
+        xOrta(num);
+        yAsagiDogru(num);
+        yYukariDogru(num);
+        yOrta(num);
+        xySagCaprazAsagiyaDogru(num);
+        xySolCaprazYukariyaDogru(num);
+        xySagCaprazAsagiyaOrta(num);
+        xySolCaprazAsagiyaDogru(num);
+        xySagCaprazYukariyaDogru(num);
+        xySolCaprazAsagiyaOrta(num);
+    }
 
-        //yerlestirilenItem.GetComponent<CircleCollider2D>().enabled = false;
-
-        string hangiPlayer = yerlestirilenItem.name.Substring(0, 2);
-
-        Vector2 itemPos = yerlestirilenItem.transform.position;
-        Vector2 altKose = itemPos - new Vector2(286, 235);
-        Vector2 ustKose = itemPos + new Vector2(286, 235);
-        Collider2D[] tabladakiItemlar = Physics2D.OverlapAreaAll(altKose, ustKose);
-
-
-
-
-        foreach (Collider2D item in tabladakiItemlar)
+    private void P1Score(int toplam, int item1Place, int item2Place, int item3Place)
+    {
+        //1 büyük 2 orta ile sayı yapılırsa 1 orta hediye et.
+        if (Mathf.Abs(toplam) == 7)
         {
-            if (item.transform.parent.name == "Placed" && item.name.StartsWith(hangiPlayer))
-            {
-                ilk9KareTemas.Add(item.gameObject);
-
-                /*ESKİ ÇALIŞAN KOD
-                Debug.Log(item + "AN : " + Time.frameCount);
-                item.GetComponent<CircleCollider2D>().enabled = false;
-                RaycastHit2D hit = Physics2D.Raycast(item.transform.position, yerlestirilenItem.transform.position, 50);
-                if (hit.collider != null) { Debug.Log("ikinci Vurduğun: " + hit.collider.gameObject.name); }
-                item.GetComponent<CircleCollider2D>().enabled = true;
-                */
-            }
-
+            Instantiate(p1Medium, p1MedPos, Quaternion.identity, p1MediumParent);
         }
-        //yerlestirilenItem.GetComponent<CircleCollider2D>().enabled = true;
+        //-----------------
 
-        ilk9KareTemas.Remove(yerlestirilenItem);
-        if (ilk9KareTemas.Count == 2)
+
+        //slottaki objeleri yok etme
+        Destroy(TablaSlotController.Current.slottakiObjeArr[item1Place]);
+        Destroy(TablaSlotController.Current.slottakiObjeArr[item2Place]);
+        Destroy(TablaSlotController.Current.slottakiObjeArr[item3Place]);
+        TablaSlotController.Current.slottakiItemArr[item1Place] = 0;
+        TablaSlotController.Current.slottakiItemArr[item2Place] = 0;
+        TablaSlotController.Current.slottakiItemArr[item3Place] = 0;
+        //------------------
+
+
+        Debug.Log("p1 score");
+        p1ScoreText.text = (int.Parse(p1ScoreText.text) + 1).ToString();
+        CheckWin(p1ScoreText.text, "p1");
+    }
+
+    private void P2Score(int toplam, int item1Place, int item2Place, int item3Place)
+    {
+        //1 büyük 2 orta ile sayı yapılırsa 1 orta hediye et.
+        if (Mathf.Abs(toplam) == 7)
         {
-            //ilk9KareTemas[0].transform.gameObject.GetComponent<CircleCollider2D>().enabled = false;
-            //ilk9KareTemas[1].transform.gameObject.GetComponent<CircleCollider2D>().enabled = false;
+            Instantiate(p2Medium, p2MedPos, Quaternion.identity, p2MediumParent);
+        }
+        //-----------------
 
 
+        //slottaki objeleri yok etme
+        Destroy(TablaSlotController.Current.slottakiObjeArr[item1Place]);
+        Destroy(TablaSlotController.Current.slottakiObjeArr[item2Place]);
+        Destroy(TablaSlotController.Current.slottakiObjeArr[item3Place]);
+        TablaSlotController.Current.slottakiItemArr[item1Place] = 0;
+        TablaSlotController.Current.slottakiItemArr[item2Place] = 0;
+        TablaSlotController.Current.slottakiItemArr[item3Place] = 0;
+        //------------------
 
-            RaycastHit2D[] hit = Physics2D.LinecastAll(ilk9KareTemas[0].transform.position, ilk9KareTemas[1].transform.position);
-            foreach (RaycastHit2D item in hit)
+
+        Debug.Log("p2 score");
+        p2ScoreText.text = (int.Parse(p2ScoreText.text) + 1).ToString();
+        CheckWin(p2ScoreText.text, "p2");
+    }
+
+    private void CheckWin(string oyuncuScore, string hangiOyuncu)
+    {
+        if (oyuncuScore == "3")
+        {
+            if (hangiOyuncu == "p1")
             {
-                Debug.Log(item.collider + " dis: " + item.distance);
+                winController.P1Win();
             }
-
-            /*
-            if (hit.collider != null)
+            else
             {
-                Debug.Log(hit.collider.transform.gameObject);
-            }*/
-            /*
-                        if (hit.collider.transform.gameObject.name.StartsWith(hangiPlayer))
-                        {
-                            Debug.Log(hit.collider.transform.gameObject);
-                        }*/
+                winController.P2Win();
+            }
         }
-
-
-
-
-
-
-        //BU KISIM ÇALIŞIYOR HAA
-        /*
-        RaycastHit2D hit = Physics2D.Raycast(yerlestirilenItem.transform.position, Vector2.right);
-
-
-        if (hit.collider.gameObject.transform.parent.name == "Placed")
-        { // 4
-
-            Debug.Log(hit.collider + " / " + hit.collider.gameObject.transform.parent.name);
-            //matchingTiles.Add(hit.transform.name);
-            //CheckNear(hit.collider.gameObject);
-            //hit = Physics2D.Raycast(hit.collider.transform.position, Vector2.right);
-
-        }
-        */
-
-
     }
 
 
 
+    private void xSagaDogru(int num)    //x ekseninde sayı. en sola konuldu. sağa doğru 3lü oldu
+    {
+        if (num % 5 <= 2)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num + 1];
+            int c = TablaSlotController.Current.slottakiItemArr[num + 2];
 
-
-
-
-
-
-
-
-    private List<GameObject> FindMatch(Vector2 castDir)
-    { // 1
-        Debug.Log("aramaya başladı");
-        List<GameObject> matchingTiles = new List<GameObject>(); // 2
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, castDir); // 3
-        while (hit.collider != null)
-        { // 4
-            Debug.Log("vurdu");
-            matchingTiles.Add(hit.collider.gameObject);
-            hit = Physics2D.Raycast(hit.collider.transform.position, castDir);
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num + 1, num + 2);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num + 1, num + 2);
         }
-        Debug.Log(matchingTiles);
-        return matchingTiles; // 5
     }
+    private void xSolaDogru(int num)    //x ekseninde sayı. en sağa konuldu. sola doğru 3lü oldu
+    {
+        if (num % 5 >= 2)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num - 1];
+            int c = TablaSlotController.Current.slottakiItemArr[num - 2];
 
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 1, num - 2);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 1, num - 2);
+        }
+    }
+    private void xOrta(int num)    //x ekseninde sayı. ortaya konuldu. ortada 3lü oldu
+    {
+        if (num % 5 >= 1 && num % 5 <= 3)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num - 1];
+            int c = TablaSlotController.Current.slottakiItemArr[num + 1];
+
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 1, num + 1);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 1, num + 1);
+        }
+    }
+    private void yAsagiDogru(int num)    //y ekseninde sayı. en yukarı konuldu. aşağı doğru 3lü oldu
+    {
+        if (num <= 14)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num + 5];
+            int c = TablaSlotController.Current.slottakiItemArr[num + 10];
+
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num + 5, num + 10);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num + 5, num + 10);
+        }
+    }
+    private void yYukariDogru(int num)    //y ekseninde sayı. en aşağı konuldu. yukarı doğru 3lü oldu
+    {
+        if (num >= 10)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num - 5];
+            int c = TablaSlotController.Current.slottakiItemArr[num - 10];
+
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 5, num - 10);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 5, num - 10);
+        }
+    }
+    private void yOrta(int num)    //y ekseninde sayı. ortaya konuldu. ortada 3lü oldu
+    {
+        if (num >= 5 && num <= 19)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num - 5];
+            int c = TablaSlotController.Current.slottakiItemArr[num + 5];
+
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 5, num + 5);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 5, num + 5);
+        }
+    }
+    private void xySagCaprazAsagiyaDogru(int num)    //çapraz ekseninde sayı. en sol üste konuldu. aşağı sağ çapraza doğru 3lü oldu
+    {
+        if (num % 5 <= 2 && num <= 12)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num + 6];
+            int c = TablaSlotController.Current.slottakiItemArr[num + 12];
+
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num + 6, num + 12);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num + 6, num + 12);
+        }
+    }
+    private void xySolCaprazYukariyaDogru(int num)    //çapraz ekseninde sayı. en sağ alta konuldu. yukarı sol çapraza doğru 3lü oldu
+    {
+        if (num % 5 >= 2 && num >= 12)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num - 6];
+            int c = TablaSlotController.Current.slottakiItemArr[num - 12];
+
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 6, num - 12);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 6, num - 12);
+        }
+    }
+    private void xySagCaprazAsagiyaOrta(int num)    //çapraz ekseninde sayı. ortaya konuldu.  aşağı sağ çapraza doğru 3lü oldu
+    {
+        if (num % 5 >= 1 && num % 5 <= 3 && num >= 6 && num <= 18)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num - 6];
+            int c = TablaSlotController.Current.slottakiItemArr[num + 6];
+
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 6, num + 6);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 6, num + 6);
+        }
+    }
+    private void xySolCaprazAsagiyaDogru(int num)    //çapraz ekseninde sayı. en sağ üste konuldu. aşağı sol çapraza doğru 3lü oldu
+    {
+        if (num % 5 >= 2 && num <= 14)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num + 4];
+            int c = TablaSlotController.Current.slottakiItemArr[num + 8];
+
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num + 4, num + 8);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num + 4, num + 8);
+        }
+    }
+    private void xySagCaprazYukariyaDogru(int num)    //çapraz ekseninde sayı. en sol alta konuldu. yukarı sağ çapraza doğru 3lü oldu
+    {
+        if (num % 5 <= 2 && num >= 10)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num - 4];
+            int c = TablaSlotController.Current.slottakiItemArr[num - 8];
+
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 4, num - 8);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 4, num - 8);
+        }
+    }
+    private void xySolCaprazAsagiyaOrta(int num)    //çapraz ekseninde sayı. ortaya konuldu.  aşağı sol çapraza doğru 3lü oldu
+    {
+        if (num % 5 >= 1 && num % 5 <= 3 && num >= 6 && num <= 18)
+        {
+            int a = TablaSlotController.Current.slottakiItemArr[num];
+            int b = TablaSlotController.Current.slottakiItemArr[num + 4];
+            int c = TablaSlotController.Current.slottakiItemArr[num - 4];
+
+            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num + 4, num - 4);
+            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num + 4, num - 4);
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

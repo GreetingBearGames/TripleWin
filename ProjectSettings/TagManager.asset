@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - P1Big
+  - P1Med
+  - P1Small
+  - P2Big
+  - P2Med
+  - P2Small
   layers:
   - Default
   - TransparentFX

@@ -8,7 +8,7 @@ public class TablaSlotController : MonoBehaviour
     public static TablaSlotController Current;
     [SerializeField] RectTransform boyutlandirilmisTabla;
     public int[] slottakiItemArr = new int[25];
-    private GameObject[] slottakiObjeArr = new GameObject[25];
+    public GameObject[] slottakiObjeArr = new GameObject[25];
     [SerializeField] GameTurnController gameTurnController;
     [SerializeField] ScoreController scoreController;
     [SerializeField] GameObject p1particle, p2particle;
@@ -45,7 +45,7 @@ public class TablaSlotController : MonoBehaviour
             slottakiItemArr[hangiSlot] = hangiItem;
             slottakiObjeArr[hangiSlot] = itemObjesi;
 
-            StartCoroutine(ItemPasiflestiriciVEturSonladrici(itemObjesi));
+            StartCoroutine(ItemPasiflestiriciVEturSonladrici(itemObjesi, hangiSlot));
         }
         else if (Mathf.Sign(slottakiItemArr[hangiSlot]) == Mathf.Sign(hangiItem))   //eğer kendi taşı üstüne bindirirse(aynı renk taş üstüste olursa)
         {
@@ -63,7 +63,7 @@ public class TablaSlotController : MonoBehaviour
 
 
 
-    private IEnumerator ItemPasiflestiriciVEturSonladrici(GameObject yeniKonulanObje)
+    private IEnumerator ItemPasiflestiriciVEturSonladrici(GameObject yeniKonulanObje, int hangiSlot)
     {
         yield return new WaitForEndOfFrame();
         yeniKonulanObje.GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -72,8 +72,10 @@ public class TablaSlotController : MonoBehaviour
         var placedItemsObject = yeniKonulanObje.transform.parent.gameObject.transform.parent.GetChild(0);
         yeniKonulanObje.transform.SetParent(placedItemsObject, true);
 
+
+        scoreController.CheckScore(hangiSlot);
+        yield return new WaitForSeconds(0.1f);
         gameTurnController.TurnSwap();
-        scoreController.CheckNear(yeniKonulanObje);
     }
 
 
@@ -99,6 +101,9 @@ public class TablaSlotController : MonoBehaviour
 
         yeniKonulanObje.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
+
+        scoreController.CheckScore(slotNumarasi);
+        yield return new WaitForSeconds(0.1f);
         gameTurnController.TurnSwap();
     }
 

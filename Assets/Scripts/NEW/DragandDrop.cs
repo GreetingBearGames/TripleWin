@@ -10,6 +10,7 @@ public class DragandDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     private GameObject boyutlandirilmisTabla;
 
 
+
     void Start()
     {
         boyutlandirilmisTabla = GameObject.Find("2-Tabla");
@@ -25,6 +26,11 @@ public class DragandDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (this.name.Substring(0, 5) == "P1Sma" || this.name.Substring(0, 5) == "P2Sma")
+        {
+            Instantiate(this, startPos, Quaternion.identity, transform.parent);
+        }
+
         canvasGroup.alpha = 0.5f;
         canvasGroup.blocksRaycasts = false;     //böylece tutup sürüklenemez yaptın.
     }

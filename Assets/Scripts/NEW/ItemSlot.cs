@@ -20,30 +20,24 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 
     private int slotaNeYerlesti(string slotaNeYerlesti)
     {
-        switch (slotaNeYerlesti)
+        switch (slotaNeYerlesti.Substring(0, 5))
         {
             case "P1Big":
                 slotaYerlesenItem = 3;
                 break;
-            case "P1Medium":
+            case "P1Med":
                 slotaYerlesenItem = 2;
                 break;
-            case "P1Medium2":
-                slotaYerlesenItem = 2;
-                break;
-            case "P1Small":
+            case "P1Sma":
                 slotaYerlesenItem = 1;
                 break;
             case "P2Big":
                 slotaYerlesenItem = -3;
                 break;
-            case "P2Medium":
+            case "P2Med":
                 slotaYerlesenItem = -2;
                 break;
-            case "P2Medium2":
-                slotaYerlesenItem = -2;
-                break;
-            case "P2Small":
+            case "P2Sma":
                 slotaYerlesenItem = -1;
                 break;
         }
