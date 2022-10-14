@@ -41,11 +41,7 @@ public class TablaSlotController : MonoBehaviour
 
         if (slottakiItemArr[hangiSlot] == 0)    //eğer ilgili tablo slotunda hiçbir item yoksa
         {
-            itemObjesi.transform.position = slotObjesi.transform.position;
-            slottakiItemArr[hangiSlot] = hangiItem;
-            slottakiObjeArr[hangiSlot] = itemObjesi;
-
-            StartCoroutine(ItemPasiflestiriciVEturSonladrici(itemObjesi, hangiSlot));
+            StartCoroutine(ItemPasiflestiriciVEturSonladrici(hangiItem, itemObjesi, hangiSlot, slotObjesi));
         }
         else if (Mathf.Sign(slottakiItemArr[hangiSlot]) == Mathf.Sign(hangiItem))   //eğer kendi taşı üstüne bindirirse(aynı renk taş üstüste olursa)
         {
@@ -63,19 +59,23 @@ public class TablaSlotController : MonoBehaviour
 
 
 
-    private IEnumerator ItemPasiflestiriciVEturSonladrici(GameObject yeniKonulanObje, int hangiSlot)
+    private IEnumerator ItemPasiflestiriciVEturSonladrici
+        (int slotaYerlesenItem, GameObject yeniKonulanObje, int slotNumarasi, GameObject slotObjesi)
     {
         yield return new WaitForEndOfFrame();
         yeniKonulanObje.GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+        yield return new WaitForEndOfFrame();
+        yeniKonulanObje.transform.position = slotObjesi.transform.position;
+        slottakiItemArr[slotNumarasi] = slotaYerlesenItem;
+        slottakiObjeArr[slotNumarasi] = yeniKonulanObje;
+
 
         //yerleştirilen objeyi Not Placed parentinden Placed parentine koymak.
         var placedItemsObject = yeniKonulanObje.transform.parent.gameObject.transform.parent.GetChild(0);
         yeniKonulanObje.transform.SetParent(placedItemsObject, true);
 
-
-        scoreController.CheckScore(hangiSlot);
-        yield return new WaitForSeconds(0.1f);
-        gameTurnController.TurnSwap();
+        scoreController.CheckScore(slotNumarasi);
     }
 
 
@@ -90,7 +90,6 @@ public class TablaSlotController : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
         yeniKonulanObje.transform.position = slotObjesi.transform.position;
-
         slottakiItemArr[slotNumarasi] = slotaYerlesenItem;
         slottakiObjeArr[slotNumarasi] = yeniKonulanObje;
 
@@ -101,10 +100,7 @@ public class TablaSlotController : MonoBehaviour
 
         yeniKonulanObje.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
-
         scoreController.CheckScore(slotNumarasi);
-        yield return new WaitForSeconds(0.1f);
-        gameTurnController.TurnSwap();
     }
 
 

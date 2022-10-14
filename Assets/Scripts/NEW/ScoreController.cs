@@ -7,28 +7,29 @@ public class ScoreController : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI p1ScoreText, p2ScoreText;
     [SerializeField] WinController winController;
-    [SerializeField] GameObject p1Medium, p2Medium;
+    [SerializeField] GameObject p1MedPrefab, p2MedPrefab;
     private Transform p1MediumParent, p2MediumParent;
     private Vector3 p1MedPos, p2MedPos;
+    [SerializeField] GameObject explosionParticle, scoreLineParticle;
+    private bool scoreVarMi;
+    [SerializeField] GameTurnController gameTurnController;
 
     void Start()
     {
-        p1Medium = GameObject.FindWithTag("P1Med");
-        p1MediumParent = p1Medium.transform.parent;
-        p1MedPos = p1Medium.transform.position;
+        GameObject p1MedInScene = GameObject.FindWithTag("P1Med");
+        p1MediumParent = p1MedInScene.transform.parent;
+        p1MedPos = p1MedInScene.transform.position;
 
-        p2Medium = GameObject.FindWithTag("P2Med");
-        p2MediumParent = p2Medium.transform.parent;
-        p2MedPos = p2Medium.transform.position;
+        GameObject p2MedInScene = GameObject.FindWithTag("P2Med");
+        p2MediumParent = p2MedInScene.transform.parent;
+        p2MedPos = p2MedInScene.transform.position;
     }
 
-    void Update()
-    {
-
-    }
 
     public void CheckScore(int num)
     {
+        scoreVarMi = false;
+
         xSagaDogru(num);
         xSolaDogru(num);
         xOrta(num);
@@ -41,55 +42,97 @@ public class ScoreController : MonoBehaviour
         xySolCaprazAsagiyaDogru(num);
         xySagCaprazYukariyaDogru(num);
         xySolCaprazAsagiyaOrta(num);
+
+        if (!scoreVarMi) gameTurnController.TurnSwap();
     }
 
-    private void P1Score(int toplam, int item1Place, int item2Place, int item3Place)
+    IEnumerator P1Score(int toplam, int item1Place, int item2Place, int item3Place)
     {
-        //1 büyük 2 orta ile sayı yapılırsa 1 orta hediye et.
-        if (Mathf.Abs(toplam) == 7)
-        {
-            Instantiate(p1Medium, p1MedPos, Quaternion.identity, p1MediumParent);
-        }
-        //-----------------
+        scoreVarMi = true;
+        yield return new WaitForSeconds(0.2f);
+        //1-score line particle'ı oynayacak
+        Vector3 scoreYonu = TablaSlotController.Current.slottakiObjeArr[item3Place].transform.position - TablaSlotController.Current.slottakiObjeArr[item1Place].transform.position;
+        float angle = Vector3.Angle(scoreYonu, transform.up);
+        Quaternion scoreAcisi = Quaternion.Euler(0, 0, angle);
+        Instantiate(scoreLineParticle, TablaSlotController.Current.slottakiObjeArr[item1Place].transform.position, scoreAcisi);
+        //111111111111111111111111111111111111
 
-
-        //slottaki objeleri yok etme
+        yield return new WaitForSeconds(0.4f);
+        //2-slotlardaki objeler yok edilecek
         Destroy(TablaSlotController.Current.slottakiObjeArr[item1Place]);
         Destroy(TablaSlotController.Current.slottakiObjeArr[item2Place]);
         Destroy(TablaSlotController.Current.slottakiObjeArr[item3Place]);
         TablaSlotController.Current.slottakiItemArr[item1Place] = 0;
         TablaSlotController.Current.slottakiItemArr[item2Place] = 0;
         TablaSlotController.Current.slottakiItemArr[item3Place] = 0;
-        //------------------
+        //222222222222222222222222222222222222
 
+        yield return new WaitForSeconds(0.2f);
+        //3-score tablosunda patlama olacak.
+        Instantiate(explosionParticle, p1ScoreText.gameObject.transform);
+        //333333333333333333333333333333333333
 
-        Debug.Log("p1 score");
+        //4-score tablosunda artış olacak.
+        yield return new WaitForSeconds(0.5f);
         p1ScoreText.text = (int.Parse(p1ScoreText.text) + 1).ToString();
+        //444444444444444444444444444444444444
+
+        yield return new WaitForSeconds(0.1f);
+        //5-orta hediye etme durumu sorgulanacak
+        if (Mathf.Abs(toplam) == 7)     //1 büyük 2 orta ile sayı yapılırsa 1 orta hediye et.
+        {
+            Instantiate(explosionParticle, p1MedPos, Quaternion.identity);
+            yield return new WaitForSeconds(0.4f);
+            Instantiate(p1MedPrefab, p1MedPos, Quaternion.identity, p1MediumParent);
+        }
+        //555555555555555555555555555555555555
+
+        yield return new WaitForSeconds(0.1f);
         CheckWin(p1ScoreText.text, "p1");
     }
 
-    private void P2Score(int toplam, int item1Place, int item2Place, int item3Place)
+    IEnumerator P2Score(int toplam, int item1Place, int item2Place, int item3Place)
     {
-        //1 büyük 2 orta ile sayı yapılırsa 1 orta hediye et.
-        if (Mathf.Abs(toplam) == 7)
-        {
-            Instantiate(p2Medium, p2MedPos, Quaternion.identity, p2MediumParent);
-        }
-        //-----------------
+        scoreVarMi = true;
+        yield return new WaitForSeconds(0.2f);
+        //1-score line particle'ı oynayacak
+        Vector3 scoreYonu = TablaSlotController.Current.slottakiObjeArr[item3Place].transform.position - TablaSlotController.Current.slottakiObjeArr[item1Place].transform.position;
+        float angle = Vector3.Angle(scoreYonu, transform.up);
+        Quaternion scoreAcisi = Quaternion.Euler(0, 0, angle);
+        Instantiate(scoreLineParticle, TablaSlotController.Current.slottakiObjeArr[item1Place].transform.position, scoreAcisi);
+        //111111111111111111111111111111111111
 
-
-        //slottaki objeleri yok etme
+        yield return new WaitForSeconds(0.4f);
+        //2-slotlardaki objeler yok edilecek
         Destroy(TablaSlotController.Current.slottakiObjeArr[item1Place]);
         Destroy(TablaSlotController.Current.slottakiObjeArr[item2Place]);
         Destroy(TablaSlotController.Current.slottakiObjeArr[item3Place]);
         TablaSlotController.Current.slottakiItemArr[item1Place] = 0;
         TablaSlotController.Current.slottakiItemArr[item2Place] = 0;
         TablaSlotController.Current.slottakiItemArr[item3Place] = 0;
-        //------------------
+        //222222222222222222222222222222222222
 
+        yield return new WaitForSeconds(0.2f);
+        //3-score tablosunda patlama olacak.
+        Instantiate(explosionParticle, p2ScoreText.gameObject.transform);
+        //333333333333333333333333333333333333
 
-        Debug.Log("p2 score");
+        //4-score tablosunda artış olacak.
+        yield return new WaitForSeconds(0.5f);
         p2ScoreText.text = (int.Parse(p2ScoreText.text) + 1).ToString();
+        //444444444444444444444444444444444444
+
+        yield return new WaitForSeconds(0.2f);
+        //5-orta hediye etme durumu sorgulanacak
+        if (Mathf.Abs(toplam) == 7)     //1 büyük 2 orta ile sayı yapılırsa 1 orta hediye et.
+        {
+            Instantiate(explosionParticle, p2MedPos, Quaternion.identity);
+            yield return new WaitForSeconds(0.4f);
+            Instantiate(p2MedPrefab, p2MedPos, Quaternion.identity, p2MediumParent);
+        }
+        //555555555555555555555555555555555555
+
+        yield return new WaitForSeconds(0.1f);
         CheckWin(p2ScoreText.text, "p2");
     }
 
@@ -106,6 +149,7 @@ public class ScoreController : MonoBehaviour
                 winController.P2Win();
             }
         }
+        else { gameTurnController.TurnSwap(); }
     }
 
 
@@ -118,8 +162,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num + 1];
             int c = TablaSlotController.Current.slottakiItemArr[num + 2];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num + 1, num + 2);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num + 1, num + 2);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num + 2, num + 1, num));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num + 2, num + 1, num));
         }
     }
     private void xSolaDogru(int num)    //x ekseninde sayı. en sağa konuldu. sola doğru 3lü oldu
@@ -130,8 +174,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num - 1];
             int c = TablaSlotController.Current.slottakiItemArr[num - 2];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 1, num - 2);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 1, num - 2);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num, num - 1, num - 2));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num, num - 1, num - 2));
         }
     }
     private void xOrta(int num)    //x ekseninde sayı. ortaya konuldu. ortada 3lü oldu
@@ -142,8 +186,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num - 1];
             int c = TablaSlotController.Current.slottakiItemArr[num + 1];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 1, num + 1);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 1, num + 1);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num + 1, num, num - 1));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num + 1, num, num - 1));
         }
     }
     private void yAsagiDogru(int num)    //y ekseninde sayı. en yukarı konuldu. aşağı doğru 3lü oldu
@@ -154,8 +198,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num + 5];
             int c = TablaSlotController.Current.slottakiItemArr[num + 10];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num + 5, num + 10);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num + 5, num + 10);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num, num + 5, num + 10));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num, num + 5, num + 10));
         }
     }
     private void yYukariDogru(int num)    //y ekseninde sayı. en aşağı konuldu. yukarı doğru 3lü oldu
@@ -166,8 +210,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num - 5];
             int c = TablaSlotController.Current.slottakiItemArr[num - 10];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 5, num - 10);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 5, num - 10);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num, num - 5, num - 10));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num, num - 5, num - 10));
         }
     }
     private void yOrta(int num)    //y ekseninde sayı. ortaya konuldu. ortada 3lü oldu
@@ -178,8 +222,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num - 5];
             int c = TablaSlotController.Current.slottakiItemArr[num + 5];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 5, num + 5);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 5, num + 5);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num - 5, num, num + 5));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num - 5, num, num + 5));
         }
     }
     private void xySagCaprazAsagiyaDogru(int num)    //çapraz ekseninde sayı. en sol üste konuldu. aşağı sağ çapraza doğru 3lü oldu
@@ -190,8 +234,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num + 6];
             int c = TablaSlotController.Current.slottakiItemArr[num + 12];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num + 6, num + 12);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num + 6, num + 12);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num + 12, num + 6, num));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num + 12, num + 6, num));
         }
     }
     private void xySolCaprazYukariyaDogru(int num)    //çapraz ekseninde sayı. en sağ alta konuldu. yukarı sol çapraza doğru 3lü oldu
@@ -202,8 +246,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num - 6];
             int c = TablaSlotController.Current.slottakiItemArr[num - 12];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 6, num - 12);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 6, num - 12);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num, num - 6, num - 12));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num, num - 6, num - 12));
         }
     }
     private void xySagCaprazAsagiyaOrta(int num)    //çapraz ekseninde sayı. ortaya konuldu.  aşağı sağ çapraza doğru 3lü oldu
@@ -214,8 +258,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num - 6];
             int c = TablaSlotController.Current.slottakiItemArr[num + 6];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 6, num + 6);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 6, num + 6);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num + 6, num, num - 6));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num + 6, num, num - 6));
         }
     }
     private void xySolCaprazAsagiyaDogru(int num)    //çapraz ekseninde sayı. en sağ üste konuldu. aşağı sol çapraza doğru 3lü oldu
@@ -226,8 +270,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num + 4];
             int c = TablaSlotController.Current.slottakiItemArr[num + 8];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num + 4, num + 8);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num + 4, num + 8);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num, num + 4, num + 8));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num, num + 4, num + 8));
         }
     }
     private void xySagCaprazYukariyaDogru(int num)    //çapraz ekseninde sayı. en sol alta konuldu. yukarı sağ çapraza doğru 3lü oldu
@@ -238,8 +282,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num - 4];
             int c = TablaSlotController.Current.slottakiItemArr[num - 8];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num - 4, num - 8);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num - 4, num - 8);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num - 8, num - 4, num));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num - 8, num - 4, num));
         }
     }
     private void xySolCaprazAsagiyaOrta(int num)    //çapraz ekseninde sayı. ortaya konuldu.  aşağı sol çapraza doğru 3lü oldu
@@ -250,8 +294,8 @@ public class ScoreController : MonoBehaviour
             int b = TablaSlotController.Current.slottakiItemArr[num + 4];
             int c = TablaSlotController.Current.slottakiItemArr[num - 4];
 
-            if (a > 0 && b > 0 && c > 0) P1Score(a + b + c, num, num + 4, num - 4);
-            else if (a < 0 && b < 0 && c < 0) P2Score(a + b + c, num, num + 4, num - 4);
+            if (a > 0 && b > 0 && c > 0) StartCoroutine(P1Score(a + b + c, num - 4, num, num + 4));
+            else if (a < 0 && b < 0 && c < 0) StartCoroutine(P2Score(a + b + c, num - 4, num, num + 4));
         }
     }
 }

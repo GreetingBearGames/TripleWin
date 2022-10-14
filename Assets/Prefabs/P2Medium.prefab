@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 5949562030306443098}
   - component: {fileID: 8443596319479900796}
   - component: {fileID: -1347439087254494554}
-  - component: {fileID: 2239293626880814133}
   - component: {fileID: 3483356164905831762}
   m_Layer: 5
   m_Name: P2Medium
@@ -145,22 +144,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!58 &2239293626880814133
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9088552562465647504}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 50
 --- !u!114 &3483356164905831762
 MonoBehaviour:
   m_ObjectHideFlags: 0

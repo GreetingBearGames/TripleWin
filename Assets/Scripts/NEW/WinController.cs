@@ -38,7 +38,7 @@ public class WinController : MonoBehaviour
             winMenu.transform.GetChild(value).GetComponent<Image>().color = clr;
             yield return new WaitForSeconds(0.05f);
         }
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         winMenu.transform.GetChild(2).transform.gameObject.SetActive(true);
         winMenu.transform.GetChild(3).transform.gameObject.SetActive(true);
     }

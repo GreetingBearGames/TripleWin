@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 5112952032384157387}
   - component: {fileID: 1041667917082114533}
   - component: {fileID: 1720165012022453983}
-  - component: {fileID: 3702461714218736859}
   - component: {fileID: -5394369878822657218}
   m_Layer: 5
   m_Name: P2Big
@@ -145,22 +144,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!58 &3702461714218736859
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1657165723399091}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 50
 --- !u!114 &-5394369878822657218
 MonoBehaviour:
   m_ObjectHideFlags: 0

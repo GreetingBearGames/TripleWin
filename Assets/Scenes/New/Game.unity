@@ -3118,7 +3118,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -3362,8 +3362,11 @@ MonoBehaviour:
   p1ScoreText: {fileID: 181560344}
   p2ScoreText: {fileID: 393676200}
   winController: {fileID: 477706899}
-  p1Medium: {fileID: 0}
-  p2Medium: {fileID: 0}
+  p1MedPrefab: {fileID: 4630934075315117413, guid: a37282434770b45d189897698ed19887, type: 3}
+  p2MedPrefab: {fileID: 9088552562465647504, guid: 0946d5ab6db524ea09a9c1158a52fe54, type: 3}
+  explosionParticle: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
+  scoreLineParticle: {fileID: 3664843105578762417, guid: a752c068f960040d7815e143dd5166ef, type: 3}
+  gameTurnController: {fileID: 2000891369}
 --- !u!4 &788968154
 Transform:
   m_ObjectHideFlags: 0

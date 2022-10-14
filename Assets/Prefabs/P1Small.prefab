@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 4887137816697294126}
   - component: {fileID: -7059817845981492799}
   - component: {fileID: 8522641881249248860}
-  - component: {fileID: 5013446429433400976}
   - component: {fileID: 5941326990117329543}
   m_Layer: 5
   m_Name: P1Small
@@ -145,22 +144,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!58 &5013446429433400976
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1957595473599515559}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 50
 --- !u!114 &5941326990117329543
 MonoBehaviour:
   m_ObjectHideFlags: 0
