@@ -10,6 +10,8 @@ TagManager:
   - P2Big
   - P2Med
   - P2Small
+  - P1Med2
+  - P2Med2
   layers:
   - Default
   - TransparentFX

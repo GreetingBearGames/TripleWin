@@ -944,7 +944,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4630934075315117413, guid: a37282434770b45d189897698ed19887, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: P1Med2
       objectReference: {fileID: 0}
     - target: {fileID: 4630934075315117414, guid: a37282434770b45d189897698ed19887, type: 3}
       propertyPath: m_Pivot.x
@@ -5033,7 +5033,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9088552562465647504, guid: 0946d5ab6db524ea09a9c1158a52fe54, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: P2Med2
       objectReference: {fileID: 0}
     - target: {fileID: 9088552562465647597, guid: 0946d5ab6db524ea09a9c1158a52fe54, type: 3}
       propertyPath: m_PreserveAspect
